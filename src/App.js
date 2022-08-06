@@ -1,10 +1,15 @@
+import { Route } from "react-router-dom";
+import Header from "./Header";
+import Sub from "./Sub";
+import Main from "./Main";
 import { useEffect } from "react";
 import { flickrState, tagState } from "./atoms";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 function App() {
-  const [Pics, setPics] = useRecoilState(flickrState);
+  const [_, setPics] = useRecoilState(flickrState);
   const tag = useRecoilValue(tagState);
+
   const callFlickr = async () => {
     const key = "fefec6c874c53fb1655dae7c9e82ab25";
     const method_search = "flickr.photos.search";
@@ -17,17 +22,13 @@ function App() {
   };
   useEffect(() => {
     callFlickr();
-  }, []);
+  }, [tag]);
   return (
-    <div>
-      {Pics.map((pic) => {
-        return (
-          <article key={pic.id}>
-            <h2>{pic.title}</h2>
-          </article>
-        );
-      })}
-    </div>
+    <>
+      <Header />
+      <Route exact path="/" component={Main} />
+      <Route path="/sub" component={Sub} />
+    </>
   );
 }
 
